@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"url-shortener/internal/models"
 	"url-shortener/internal/service"
@@ -40,6 +41,8 @@ func (app *App) handleShortToOriginal(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	log.Printf("[DEBUG] ShortToOriginal called with shortURL: %s", shortURL)
+	
 	resp, err := app.urlService.ShortToOriginal(shortURL)
 	if err != nil {
 		http.Error(w, models.ErrNotFound, http.StatusNotFound)

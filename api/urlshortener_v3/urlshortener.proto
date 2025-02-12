@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package urlshortener_v3;
+
+option go_package = "pkg/urlshortener_v3;urlshortener_v3";
+
+service URLShortener {
+    rpc OriginalToShort (OriginalURLRequest) returns (ShortURLResponse);
+    rpc ShortToOriginal (ShortURLRequest) returns (OriginalURLResponse);
+}
+
+message OriginalURLRequest {
+    string original_url = 1;
+}
+
+message ShortURLResponse {
+    string short_url = 1;
+}
+
+message ShortURLRequest {
+    string short_url = 1;
+}
+
+message OriginalURLResponse {
+    string original_url = 1;
+}

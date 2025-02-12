@@ -8,6 +8,7 @@ services:
     container_name: ozon-bank-app  
     ports:
       - "8080:8080"
+      - "50051:50051"
     environment:
       - STORAGE_TYPE=inmemory
     restart: always   
