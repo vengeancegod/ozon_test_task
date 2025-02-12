@@ -42,7 +42,7 @@ func (app *App) handleShortToOriginal(w http.ResponseWriter, r *http.Request) {
 
 	resp, err := app.urlService.ShortToOriginal(shortURL)
 	if err != nil {
-		http.Error(w, models.ErrShortNotFound, http.StatusNotFound)
+		http.Error(w, models.ErrNotFound, http.StatusNotFound)
 		return
 	}
 

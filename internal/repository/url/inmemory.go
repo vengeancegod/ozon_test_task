@@ -41,13 +41,13 @@ func (repo *repository) OriginalToShort(sRequest models.ShortRequest, shortURL s
 	return models.ShortResponse{ShortURL: shortURL}, nil
 }
 
-func (repo *repository) ShortToOriginal(shortURL string) (models.ShortResponse, error) {
+func (repo *repository) ShortToOriginal(shortURL string) (models.ShortRequest, error) {
 	repo.mu.RLock()
 	defer repo.mu.RUnlock()
 
 	if req, exists := repo.sRequest[shortURL]; exists {
-		return models.ShortResponse{ShortURL: req.OriginalURL}, nil
+		return models.ShortRequest{OriginalURL: req.OriginalURL}, nil
 	}
 
-	return models.ShortResponse{}, errors.New(models.ErrNotFound)
+	return models.ShortRequest{}, errors.New(models.ErrNotFound)
 }

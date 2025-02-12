@@ -17,6 +17,6 @@ func (s *Service) OriginalToShort(sRequest models.ShortRequest) (models.ShortRes
 	return s.urlRepository.OriginalToShort(sRequest, shortURL)
 }
 
-func (s *Service) ShortToOriginal(shortURL string) (models.ShortResponse, error) {
+func (s *Service) ShortToOriginal(shortURL string) (models.ShortRequest, error) {
 	return s.urlRepository.ShortToOriginal(shortURL)
 }

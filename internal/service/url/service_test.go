@@ -30,5 +30,5 @@ func TestShortToOriginal(t *testing.T) {
   resp, err := service.ShortToOriginal(shortURL)
 
   assert.NoError(t, err)
-  assert.Equal(t, "https://qwere.com", resp.ShortURL)
+  assert.Equal(t, "https://qwere.com", resp.OriginalURL)
 }

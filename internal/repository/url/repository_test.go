@@ -27,5 +27,5 @@ func TestShortToOriginal(t *testing.T) {
 	resp, err := repo.ShortToOriginal(shortURL)
 
 	assert.NoError(t, err)
-	assert.Equal(t, "https://vk.com/didididid", resp.ShortURL)
+	assert.Equal(t, "https://vk.com/didididid", resp.OriginalURL)
 }

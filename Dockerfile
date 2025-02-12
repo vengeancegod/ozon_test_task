@@ -8,7 +8,7 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o main ./cmd/http
+RUN CGO_ENABLED=0 go build -o main ./cmd/http
 
 FROM alpine:latest
 
@@ -18,4 +18,4 @@ COPY --from=builder /app/main .
 
 EXPOSE 8080
 
-CMD ["./main"]
+CMD ./main -storage=$STORAGE_TYPE
