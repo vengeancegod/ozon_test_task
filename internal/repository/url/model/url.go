@@ -1,7 +1,7 @@
 package url
 
 type ShortRequest struct {
-	OriginalURL string `json:"url"`
+	OriginalURL string `json:"original_url"`
 }
 
 type ShortResponse struct {
