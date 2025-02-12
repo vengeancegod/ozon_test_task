@@ -3,13 +3,16 @@ package main
 import (
 	"flag"
 	"log"
-	"net/http"
+	"net"
 	"os"
-	"url-shortener/internal/handlers"
+	"url-shortener/internal/api"
 	"url-shortener/internal/infrastructure"
 	"url-shortener/internal/repository"
 	"url-shortener/internal/repository/url"
 	uService "url-shortener/internal/service/url"
+	desc "url-shortener/pkg/urlshortener_v3"
+
+	"google.golang.org/grpc"
 )
 
 func main() {
@@ -20,15 +23,16 @@ func main() {
 	if envStorageType := os.Getenv("STORAGE+TYPE"); envStorageType != "" {
 		*storageType = envStorageType
 	}
+
 	switch *storageType {
 	case "postgres":
 		db, err := infrastructure.InitDB()
 		if err != nil {
-			log.Fatal("Failed initialize db: %v", err)
+			log.Fatalf("Failed to initialize DB: %v", err)
 		}
 		repo, err = url.NewRepositoryPG(db)
 		if err != nil {
-			log.Fatalf("Failed create PG repository: %v", err)
+			log.Fatalf("Failed to create PG repository: %v", err)
 		}
 	case "inmemory":
 		repo = url.NewRepository()
@@ -37,15 +41,22 @@ func main() {
 	}
 
 	urlService := uService.NewService(repo)
-	app := handlers.NewApp(urlService)
+	// urlService := uService.NewImplementation(uService)
 
-	server := http.Server{
-		Addr:    ":8080",
-		Handler: app.Routes(),
+	server := grpc.NewServer()
+
+	desc.RegisterURLShortenerServer(server, &api.Implementation{
+		URLService: urlService,
+	})
+
+	listen, err := net.Listen("tcp", ":50051")
+	if err != nil {
+		log.Fatalf("Failed to listen on port 50051: %v", err)
 	}
 
-	log.Println(("Listen on :8080"))
-	if err := server.ListenAndServe(); err != nil {
-		log.Fatal(err)
+	log.Println("gRPC server started on port :50051")
+
+	if err := server.Serve(listen); err != nil {
+		log.Fatalf("Failed to serve gRPC server: %v", err)
 	}
 }
